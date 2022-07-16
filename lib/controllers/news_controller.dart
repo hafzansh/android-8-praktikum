@@ -18,10 +18,10 @@ class NewsController extends GetxController {
 
   RxInt pageNum = 1.obs;
   RxInt pageSize = 10.obs;
-
   dynamic isSwitched = false.obs;
   dynamic isPageLoading = false.obs;
 
+  String _baseApi = baseApi;
   @override
   void onInit() {
     scrollController = ScrollController()..addListener(_scrollListener);
@@ -52,30 +52,30 @@ class NewsController extends GetxController {
       news = [];
       pageNum.value = 1;
     }
-    baseApi = "${baseApi}pageSize=10&page=$pageNum&";
-    baseApi += country.value == '' ? 'country=id&' : 'country=$country';
-    baseApi += category.value == '' ? '' : 'category=$category';
-    baseApi += 'apiKey=$apiKey';
+    _baseApi = "${_baseApi}pageSize=10&page=$pageNum&";
+    _baseApi += country.value == '' ? 'country=id&' : 'country=$country';
+    _baseApi += category.value == '' ? '' : 'category=$category';
+    _baseApi += 'apiKey=$apiKey';
 
     if (channel != '') {
       country.value = '';
       category.value = '';
-      baseApi =
-          "${baseApi}pageSize=10&page=$pageNum&sources=$channel&apiKey=$apiKey";
+      _baseApi =
+          "${_baseApi}pageSize=10&page=$pageNum&sources=$channel&apiKey=$apiKey";
     }
     if (searchKey != '') {
       country.value = '';
       category.value = '';
-      baseApi =
-          "${baseApi}pageSize=10&page=$pageNum&q=$searchKey&apiKey=$apiKey";
+      _baseApi =
+          "${_baseApi}pageSize=10&page=$pageNum&q=$searchKey&apiKey=$apiKey";
     }
-    print(baseApi);
-    getDataFromApi(baseApi);
+    print(_baseApi);
+    getDataFromApi(_baseApi);
   }
 
   changeTheme(value) {
     Get.changeTheme(value == true ? ThemeData.dark() : ThemeData.light());
-    isSwitched = value;    
+    isSwitched = value;
     update();
   }
 
